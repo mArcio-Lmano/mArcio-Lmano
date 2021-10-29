@@ -203,3 +203,6 @@ bindsym $mod+f exec nautilus
 exec_always feh --bg-scale /home/mano/Pictures/wallpaper.jpg
 exec_always i3-sensible-terminal
 
+# Gaps Wn
+gaps inner 10
+gaps outer 10
