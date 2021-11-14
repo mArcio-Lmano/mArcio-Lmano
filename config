@@ -180,7 +180,7 @@ bindsym $mod+r mode "resize"
 
 
 # class                 border  backgr. text    indicator child_border
-client.focused          #2c3445 #2c3445 #ffffff #2e9ef4   #2c3445
+client.focused          #00001e #2c3445 #ffffff #2e9ef4   #00001e 
 client.focused_inactive #333333 #5f676a #ffffff #484e50   #5f676a
 client.unfocused        #ffffff #ffffff #000000 #292d2e   #ffffff
 client.urgent           #2f343a #900000 #ffffff #900000   #900000
@@ -202,7 +202,13 @@ bindsym $mod+f exec nautilus
 # Personal Commands
 exec_always feh --bg-scale /home/mano/Pictures/wallpaper.jpg
 exec_always i3-sensible-terminal
-
-# Gaps Wn
+ 
+# Gaps wn
 gaps inner 10
-gaps outer 10
+gaps outer 5
+
+# Transperancy
+exec --no-startup-id picom -CGb
+
+# No Border
+for_window [class="^.*"] border pixel 0
