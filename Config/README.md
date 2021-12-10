@@ -1,2 +1,5 @@
 # Ficheiros:
-* config -> config file i3
+
+* config -> config file i3 wm
+* picom.conf -> config file picom
+
