@@ -1,5 +1,9 @@
-# Repositório Destinado a ficheiros pessoais
+##About me:
+* **Name**: Márcio Eduardo Lima Mano
+* Currently studying Physics Engineering at the University of Minho 
 
-##Config dir:
+# Repositório Destinado a ficheiros pessoais partilhado entre as minha diferentes maquinas:
+
+## Config dir:
  * Config file: i3 WM
  * Config file: picom
