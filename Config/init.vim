@@ -1,5 +1,5 @@
 :set number
-set tabstop=4
+:set tabstop=4
 :set shiftwidth=4
 :set smarttab
 :set mouse=a
@@ -8,7 +8,7 @@ call plug#begin()
 	Plug 'https://github.com/vim-airline/vim-airline'
 	Plug 'https://github.com/preservim/nerdtree'
 	Plug 'https://github.com/preservim/tagbar'       
-	Plug 'https://github.com/neoclide/coc.nvim'
+	Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
 
