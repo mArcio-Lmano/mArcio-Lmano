@@ -11,12 +11,18 @@ import XMonad
 import Data.Monoid
 import System.Exit
 
+-- Xmobar avoid structs
+import XMonad.Hooks.ManageDocks
+
 -- Gaps
 import XMonad.Layout.Spacing
 
 -- Wallpaper
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
+
+-- Xmobar
+import XMonad.Hooks.DynamicLog
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
@@ -196,7 +202,7 @@ myGaps = spacingRaw False            -- False=Apply even when single window
                     True             -- Enable window borders
 
 
-myLayout = myGaps $ tiled ||| Mirror tiled ||| Full
+myLayout = avoidStruts $ myGaps $ tiled ||| Mirror tiled ||| Full
   where
      -- default tiling algorithm partitions the screen into two panes
      tiled   = Tall nmaster delta ratio
@@ -245,7 +251,6 @@ myEventHook = mempty
 -- Status bars and logging
 
 -- Perform an arbitrary action on each internal state change or X event.
-				"90:class_g = 'Alacritty' && focused",
 -- See the 'XMonad.Hooks.DynamicLog' extension for examples.
 --
 myLogHook = return ()
@@ -259,17 +264,19 @@ myLogHook = return ()
 --
 -- By default, do nothing.
 myStartupHook = do
-                SpawnOnce "picom &"
+                spawnOnce "picom --experimental-backends -b" 
+                spawnOnce "~/.fehbg"
+                spawnOnce "xmobar -x 0 /home/talocha/.config/xmobar/xmobarrc" 
+
+------------------------------------------------------------------------
+
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
 
 -- Run xmonad with the settings you specify. No need to modify this.
 --
-main = do
-       xmproc <- spawnPipe "~/.fehbg"
---	   xmproc <- spawnPipe "picom --config ~/.config/picom/picom.conf"
-       xmonad defaults
+main = xmonad $ docks defaults
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
@@ -278,7 +285,7 @@ main = do
 -- No need to modify this.
 --
 defaults = def {
-      -- simple stuff
+
         terminal           = myTerminal,
         focusFollowsMouse  = myFocusFollowsMouse,
         clickJustFocuses   = myClickJustFocuses,
@@ -306,7 +313,7 @@ help = unlines ["The default modifier key is 'alt'. Default keybindings:",
     "",
     "-- launching and killing programs",
     "mod-Shift-Enter  Launch xterminal",
-    "mod-p            Launch dmenu",
+    "mod-d            Launch dmenu",
     "mod-Shift-p      Launch gmrun",
     "mod-Shift-c      Close/kill the focused window",
     "mod-Space        Rotate through the available layout algorithms",
