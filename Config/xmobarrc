@@ -1,17 +1,22 @@
 Config { 
 
    -- appearance
-     font =         "xft:Bitstream Vera Sans Mono:size=12:bold:antialias=true"
+     font =         "xft:Bitstream Vera Sans Mono:pixelsize=15:bold:antialias=true"
+   , additionalFonts = [ "xft:Font Awesome Regular:pixelsize=15"
+                       , "xft:Font Awesome 6 Free Solid:pixelsize=15"
+                       , "xft:Font Awesome 6 Brands:pixelsize=15"
+                       ]
+ 
    , bgColor =      "#343941"
    , fgColor =      "#FFFFFF"
-   , position =     TopW C 75
+   , position =     TopW C 85
    , border =       BottomB
    , borderColor =  "#646464"
 
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "}{"  -- separator between left-right alignment
-   , template = "%multicpu% | %coretemp% | %memory% | %dynnetwork% }{ %RJTT% | %date% || %kbd% "
+   , template = " %cpu% | %multicoretemp% | %memory% | %dynnetwork% }{ %date% || %kbd% "
 
    -- general behavior
    , lowerOnStart =     True    -- send to bottom of window stack on start
@@ -19,7 +24,7 @@ Config {
    , allDesktops =      True    -- show on all desktops
    , overrideRedirect = True    -- set the Override Redirect flag (Xlib)
    , pickBroadest =     False   -- choose widest display (multi-monitor)
-   , persistent =       True    -- enable/disable hiding (True = disabled)
+   , persistent =       False    -- enable/disable hiding (True = disabled)
 
    -- plugins
    --   Numbers can be automatically colored according to their value. xmobar
@@ -35,41 +40,56 @@ Config {
    --   The --template option controls how the plugin is displayed. Text
    --   color can be set by enclosing in <fc></fc> tags. For more details
    --   see http://projects.haskell.org/xmobar/#system-monitor-plugins.
-   , commands = 
-
-        -- weather monitor
-        [ Run Weather "RJTT" [ "--template", "<fc=#4682B4><skyCondition></fc> | <fc=#4682B4><tempC></fc>°C | <fc=#4682B4><rh></fc>% | <fc=#4682B4><pressure></fc>hPa"
-                             ] 36000
-
+   , commands = [ 
         -- network activity monitor (dynamic interface resolution)
-        , Run DynNetwork     [ "--template" , "<dev>: <tx>kB/s|<rx>kB/s"
-                             , "--Low"      , "1000"       -- units: B/s
-                             , "--High"     , "5000"       -- units: B/s
-                             , "--low"      , "darkgreen"
-                             , "--normal"   , "darkorange"
-                             , "--high"     , "darkred"
-                             ] 10
+        Run DynNetwork     [ "--template" , "<fn=2>\xf1eb</fn>: <tx>kB/s|<rx>kB/s"
+                           , "--Low"      , "1000"       -- units: B/s
+                           , "--High"     , "5000"       -- units: B/s
+                           , "--low"      , "darkgreen"
+                           , "--normal"   , "darkorange"
+                           , "--high"     , "darkred"
+                           ] 10
 
         -- cpu activity monitor
-        , Run MultiCpu       [ "--template" , "Cpu: <total0>%|<total1>%"
-                             , "--Low"      , "50"         -- units: %
-                             , "--High"     , "85"         -- units: %
-                             , "--low"      , "darkgreen"
-                             , "--normal"   , "darkorange"
-                             , "--high"     , "darkred"
-                             ] 10
+        , Run Cpu       [ "--template" , "<fn=2>\xf108</fn>: <bar>"
+                        , "--Low"      , "50"         -- units: %
+                        , "--High"     , "85"         -- units: %
+                        , "--low"      , "darkgreen"
+                        , "--normal"   , "darkorange"
+                        , "--high"     , "darkred"
+                        ] 10
 
-        -- cpu core temperature monitor
-        , Run CoreTemp       [ "--template" , "Temp: <core0>°C|<core1>°C"
-                             , "--Low"      , "70"        -- units: °C
-                             , "--High"     , "80"        -- units: °C
-                             , "--low"      , "darkgreen"
-                             , "--normal"   , "darkorange"
-                             , "--high"     , "darkred"
-                             ] 50
+		-- Cpu temperature not working at the moment
+--		, Run K10Temp "0000:00:18.3" 
+--						[ "--template" , "Temp: <Tdie>C|<Tctl>C"
+--						, "-Low"       , "40"
+--						, "-High"      , "60"
+--						, "-low"       , "lightblue"
+--						, "-normal"    , "gray90"
+--						, "-high"      , "red"
+--						] 50
+    
+		-- CPU Frequency not working in the moment
+--		, Run CpuFreq [ "--template", "Freq:<avg>GHz"
+--		              , "-Low"      , "0"
+--					  , "-High"     , "2"
+--					  , "-low"      , "lightblue"
+--					  , "-normal"   ,"white"
+--					  , "-high"     , "red"
+--					  ] 50
+
+        -- cpu core temperature monitor, not working in the moment, i will try with k10temp
+        , Run MultiCoreTemp       [ "--template"         , "<fn=2>\xf2c9</fn>: <avg>°C"
+		                          , "-hwmon-path"        , "/sys/class/hwmon/hwmon1"
+                                  , "--Low"              , "60"        -- units: °C
+                                  , "--High"             , "80"        -- units: °C
+                                  , "--low"              , "darkgreen"
+                                  , "--normal"           , "darkorange"
+                                  , "--high"             , "darkred"
+                                  ] 50
                           
         -- memory usage monitor
-        , Run Memory         [ "--template" ,"Mem: <usedratio>%"
+        , Run Memory         [ "--template" ,"<fn=2>\xf538</fn>: <usedbar>%"
                              , "--Low"      , "20"        -- units: %
                              , "--High"     , "90"        -- units: %
                              , "--low"      , "darkgreen"
@@ -79,11 +99,12 @@ Config {
 
         -- time and date indicator 
         --   (%F = y-m-d date, %a = day of week, %T = h:m:s time)
-        , Run Date           "<fc=#ABABAB>%F (%a) %T</fc>" "date" 10
+        , Run Date           "<fc=#FFFFFF>%F (%a) <fn=2>\xf017</fn> %T</fc>" "date" 10
 
         -- keyboard layout indicator
         , Run Kbd            [ ("us(dvorak)" , "<fc=#00008B>DV</fc>")
                              , ("us"         , "<fc=#FFFFFF>US</fc>")
                              ]
+
         ]
    }
