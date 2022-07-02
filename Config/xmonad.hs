@@ -81,6 +81,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- launch gmrun
     , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
 
+	-- lauch firefox
+	, ((modm,               xK_f     ), spawn "firefox")
+
     -- close focused window
     , ((modm .|. shiftMask, xK_q     ), kill)
 
