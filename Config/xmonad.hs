@@ -20,6 +20,11 @@ import XMonad.Hooks.DynamicLog
 -- Multimedia keys
 import Graphics.X11.ExtraTypes.XF86
 
+-- Toggle Border
+import XMonad.Hooks.ManageDocks
+import XMonad.Layout.MultiToggle.Instances
+import XMonad.Layout.NoBorders
+
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
@@ -77,8 +82,11 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- launch gmrun
     , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
 
-	-- lauch firefox
-	, ((modm,               xK_f     ), spawn "firefox")
+    -- lauch firefox
+    , ((modm,               xK_f     ), spawn "firefox")
+
+    -- lauch mocp (Music On Consule)
+    , ((modm,               xK_m     ), spawn "mocp")
 
     -- close focused window
     , ((modm .|. shiftMask, xK_q     ), kill)
@@ -162,11 +170,15 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
         , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
     ++
-	
-	-- Multimedia keys from the keybord
-	[ ((0, xF86XK_AudioLowerVolume   ), spawn "amixer set Master 2-")
+
+    -- Multimedia keys from the keybord
+    [ ((0, xF86XK_AudioLowerVolume   ), spawn "amixer set Master 2-")
     , ((0, xF86XK_AudioRaiseVolume   ), spawn "amixer set Master 2+")
     , ((0, xF86XK_AudioMute          ), spawn "amixer -D pulse set Master toggle")]
+    -- ++
+
+	-- Togle Avoid Structs and Toggle Gaps
+   --[ ((modm               , xK_b    ), sendMessage (Toggle NOBORDERS))]
 
 ------------------------------------------------------------------------
 -- Mouse bindings: default actions bound to mouse events
@@ -199,14 +211,14 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- which denotes layout choice.
 --
 
-myGaps = spacingRaw False            -- False=Apply even when single window
+myGaps = spacingRaw True             -- False=Apply even when single window
                     (Border 5 5 5 5) -- Screen border size top bot rght lft
                     True             -- Enable screen border
                     (Border 5 5 5 5) -- Window border size
                     True             -- Enable window borders
 
 
-myLayout = avoidStruts $ myGaps $ tiled ||| Mirror tiled ||| Full
+myLayout = avoidStruts ( myGaps ( tiled ||| Mirror tiled)) ||| noBorders Full
   where
      -- default tiling algorithm partitions the screen into two panes
      tiled   = Tall nmaster delta ratio
