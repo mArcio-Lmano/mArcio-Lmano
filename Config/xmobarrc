@@ -80,10 +80,11 @@ Config {
 
 			-- Storage Usage
 		, Run DiskU [ ("nvme0n1p3", "<fn=2>\xf0a0</fn>: <usedbar>(<used>/<size>)")]
-                    [  "-L"       , "20"
-				    ,  "-H"       , "50"
+                    [  "-L"       , "50"
+				    ,  "-H"       , "80"
 					,  "-l"       , "green"
 					,  "-h"       , "red"
+					,  "-n"       , "orange"
 				    ,  "-m"       , "1"
 				    ,  "-p"       , "3"
 				    ] 20	
@@ -99,7 +100,7 @@ Config {
                                   ] 50
                           
         -- memory usage monitor
-        , Run Memory         [ "--template" ,"<fn=2>\xf538</fn>: <usedbar>%"
+        , Run Memory         [ "--template" ,"<fn=2>\xf538</fn>: <usedbar> (<total>%)"
                              , "--Low"      , "20"        -- units: %
                              , "--High"     , "90"        -- units: %
                              , "--low"      , "green"
