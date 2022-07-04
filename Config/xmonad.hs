@@ -85,8 +85,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- lauch firefox
     , ((modm,               xK_f     ), spawn "firefox")
 
-    -- lauch mocp (Music On Consule)
-    , ((modm,               xK_m     ), spawn "mocp")
+    -- lauch mocp (Music On Consule, not working)
+--    , ((modm .|. shiftMask, xK_m     ), spawn "mocp")
 
     -- close focused window
     , ((modm .|. shiftMask, xK_q     ), kill)
