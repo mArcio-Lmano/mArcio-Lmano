@@ -1,11 +1,4 @@
---
--- xmonad example config file.
---
--- A template showing all available configuration hooks,
--- and how to override the defaults in your own xmonad.hs conf file.
---
--- Normally, you'd only override those defaults you care about.
---
+-- Imports
 
 import XMonad
 import Data.Monoid
@@ -23,6 +16,9 @@ import XMonad.Util.SpawnOnce
 
 -- Xmobar
 import XMonad.Hooks.DynamicLog
+
+-- Multimedia keys
+import Graphics.X11.ExtraTypes.XF86
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
@@ -165,7 +161,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
         | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
         , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
-
+    ++
+	
+	-- Multimedia keys from the keybord
+	[ ((0, xF86XK_AudioLowerVolume   ), spawn "amixer set Master 2-")
+    , ((0, xF86XK_AudioRaiseVolume   ), spawn "amixer set Master 2+")
+    , ((0, xF86XK_AudioMute          ), spawn "amixer -D pulse set Master toggle")]
 
 ------------------------------------------------------------------------
 -- Mouse bindings: default actions bound to mouse events
