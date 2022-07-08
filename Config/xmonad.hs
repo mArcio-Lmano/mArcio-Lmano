@@ -177,7 +177,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((0, xF86XK_AudioMute          ), spawn "amixer -D pulse set Master toggle")]
     -- ++
 
-	-- Togle Avoid Structs and Toggle Gaps
+    -- Togle Avoid Structs and Toggle Gaps
    --[ ((modm               , xK_b    ), sendMessage (Toggle NOBORDERS))]
 
 ------------------------------------------------------------------------
@@ -211,14 +211,14 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- which denotes layout choice.
 --
 
-myGaps = spacingRaw True             -- False=Apply even when single window
+myGaps = spacingRaw False            -- False=Apply even when single window
                     (Border 5 5 5 5) -- Screen border size top bot rght lft
                     True             -- Enable screen border
                     (Border 5 5 5 5) -- Window border size
                     True             -- Enable window borders
 
 
-myLayout = avoidStruts ( myGaps ( tiled ||| Mirror tiled)) ||| noBorders Full
+myLayout = avoidStruts ( myGaps ( tiled ||| Mirror tiled )) ||| noBorders Full
   where
      -- default tiling algorithm partitions the screen into two panes
      tiled   = Tall nmaster delta ratio
