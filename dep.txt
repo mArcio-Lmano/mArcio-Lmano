@@ -1,0 +1,10 @@
+xorg-server
+xorg-init
+git
+neovim
+firefox
+xmonad
+xmonad-contrib
+xterm
+ttf-fira-mono
+scrot
