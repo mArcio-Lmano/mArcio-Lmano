@@ -15,7 +15,8 @@ import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
 
 -- Xmobar
-import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.StatusBar
+import XMonad.Hooks.StatusBar.PP
 
 -- Multimedia keys
 import Graphics.X11.ExtraTypes.XF86
@@ -24,6 +25,11 @@ import Graphics.X11.ExtraTypes.XF86
 import XMonad.Hooks.ManageDocks
 import XMonad.Layout.MultiToggle.Instances
 import XMonad.Layout.NoBorders
+
+-- Screen Shot
+import XMonad.Util.Ungrab
+
+-- Works
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
@@ -80,15 +86,19 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_d     ), spawn "dmenu_run -c -l 15")
 
     -- launch gmrun
-    , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
+    --, ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
 
     -- lauch firefox
     , ((modm,               xK_f     ), spawn "firefox")
 
     -- lauch mocp (Music On Consule, not working)
---    , ((modm .|. shiftMask, xK_m     ), spawn "mocp")
+    --, ((modm .|. shiftMask, xK_m     ), spawn "mocp")
 
-    -- close focused window
+    -- screen shot
+	, ((modm,               xK_p    ), unGrab >> spawn "scrot -u ~/Pictures/Screenshots/%Y-%m-%d-%T-screenshot.png") -- focused window
+    , ((modm .|. shiftMask, xK_p    ), unGrab >> spawn "scrot ~/Pictures/Screenshots/%Y-%m-%d-%T-screenshot.png")    -- windows on the screen
+    
+	-- close focused window
     , ((modm .|. shiftMask, xK_q     ), kill)
 
      -- Rotate through the available layout algorithms
@@ -211,7 +221,7 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- which denotes layout choice.
 --
 
-myGaps = spacingRaw False            -- False=Apply even when single window
+myGaps = spacingRaw True             -- False=Apply even when single window
                     (Border 5 5 5 5) -- Screen border size top bot rght lft
                     True             -- Enable screen border
                     (Border 5 5 5 5) -- Window border size
@@ -285,14 +295,16 @@ myStartupHook = do
                 spawnOnce "xmobar -x 0 /home/talocha/.config/xmobar/xmobarrc" 
 
 ------------------------------------------------------------------------
-
+-- Xmobar Workspaces
+myPP = def { ppCurrent = xmobarColor "black" "white" }
+mySB = statusBarProp "xmobar" (pure myPP)
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
 
 -- Run xmonad with the settings you specify. No need to modify this.
 --
-main = xmonad $ docks defaults
+main = xmonad . withEasySB mySB defToggleStrutsKey $ docks defaults
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
