@@ -1,5 +1,5 @@
 # About me:
 
-* **Name**: Márcio Eduardo Lima Mano
+* **Name**: Márcio Mano
 * **Age**: 24y
 * Data & Platform Engineer @ CTW, BMW Group 
